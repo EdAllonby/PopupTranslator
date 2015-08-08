@@ -29,9 +29,12 @@ namespace PopupTranslator
         {
             if (mainWindow == null || !mainWindow.IsActive)
             {
-                var result = TranslateText("hello", "en|ch");
                 mainWindow = new MainWindow();
                 mainWindow.Show();
+            }
+            else
+            {
+                mainWindow.Close();
             }
         }
 
