@@ -13,7 +13,7 @@ namespace PopupTranslator
     /// </summary>
     public partial class App
     {
-        private MainWindow mainWindow;
+        private readonly MainWindow mainWindow = new MainWindow();
 
         private const ModifierKeys ModifierKeys = System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Alt;
         private const Key ActionKey = Key.Down;
@@ -27,18 +27,16 @@ namespace PopupTranslator
 
         private void OnIncrement(object o, HotkeyEventArgs e)
         {
-            if (mainWindow == null || !mainWindow.IsActive)
+            if (!mainWindow.IsActive)
             {
-                mainWindow = new MainWindow();
                 mainWindow.Show();
             }
             else
             {
-                mainWindow.Close();
+                mainWindow.Hide();
             }
         }
-
-
+        
         public string TranslateText(string input, string languagePair)
         {
             var translation = new Translator();
