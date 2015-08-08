@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using NHotkey;
 using NHotkey.Wpf;
@@ -26,9 +29,18 @@ namespace PopupTranslator
         {
             if (mainWindow == null || !mainWindow.IsActive)
             {
+                var result = TranslateText("hello", "en|ch");
                 mainWindow = new MainWindow();
                 mainWindow.Show();
             }
+        }
+
+
+        public string TranslateText(string input, string languagePair)
+        {
+            var translation = new Translator();
+
+            return translation.Translate(input, "English", "Chinese");
         }
     }
 }
