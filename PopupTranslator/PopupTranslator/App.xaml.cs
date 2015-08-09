@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using Hardcodet.Wpf.TaskbarNotification;
 using NHotkey;
 using NHotkey.Wpf;
 
@@ -17,6 +18,10 @@ namespace PopupTranslator
         protected override void OnStartup(StartupEventArgs e)
         {
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+            TaskbarIcon taskbarIcon = new TaskbarIcon();
+
+            taskbarIcon.ContextMenu = new SettingsMenuView();
 
             HotkeyManager.Current.AddOrReplace("Increment", ActionKey, ModifierKeys, OnIncrement);
         }
