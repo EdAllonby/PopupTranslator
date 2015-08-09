@@ -4,7 +4,7 @@
     {
         public MainViewModel MainViewModel => IocKernel.Get<MainViewModel>();
 
-        public SettingsMenuViewModel SettingsMenuViewModel => IocKernel.Get<SettingsMenuViewModel>();
+        public ContextMenuViewModel SettingsMenuViewModel => IocKernel.Get<ContextMenuViewModel>();
 
     }
 }

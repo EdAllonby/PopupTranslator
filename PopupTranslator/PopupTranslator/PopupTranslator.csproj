@@ -80,10 +80,10 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="GoogleTranslator.cs" />
-    <Compile Include="SettingsMenuView.xaml.cs">
-      <DependentUpon>SettingsMenuView.xaml</DependentUpon>
+    <Compile Include="ContextMenuView.xaml.cs">
+      <DependentUpon>ContextMenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsMenuViewModel.cs" />
+    <Compile Include="ContextMenuViewModel.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -97,7 +97,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SettingsMenuView.xaml">
+    <Page Include="ContextMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
