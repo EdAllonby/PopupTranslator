@@ -15,7 +15,7 @@ namespace PopupTranslator
         /// The time it took to translate the last request.
         /// </summary>
         TimeSpan TranslationTime { get; }
-        
+
         /// <summary>
         /// Translate between two languages in async.
         /// </summary>

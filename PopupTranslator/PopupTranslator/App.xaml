@@ -7,7 +7,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <ioC:ViewModelLocator x:Key="ViewModelLocator"/>
+                    <ioC:ViewModelLocator x:Key="ViewModelLocator" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

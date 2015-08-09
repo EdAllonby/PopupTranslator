@@ -4,12 +4,12 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using PopupTranslator.Annotations;
 
-namespace PopupTranslator
+namespace PopupTranslator.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private string textToTranslate;
         private readonly ITranslator googleTranslator;
+        private string textToTranslate;
         private string translatedText;
 
         public MainViewModel(ITranslator translator)
@@ -49,8 +49,8 @@ namespace PopupTranslator
 
         public async void Translate(object obj)
         {
-            Language englishLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("English"));
-            Language chineseLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("Chinese"));
+            var englishLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("English"));
+            var chineseLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("Chinese"));
 
             TranslatedText = await googleTranslator.TranslateAsync(textToTranslate, englishLanguage, chineseLanguage);
         }

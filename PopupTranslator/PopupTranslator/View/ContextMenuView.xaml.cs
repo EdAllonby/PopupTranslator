@@ -1,4 +1,4 @@
-﻿namespace PopupTranslator
+﻿namespace PopupTranslator.View
 {
     /// <summary>
     /// Interaction logic for SettingsMenuView.xaml

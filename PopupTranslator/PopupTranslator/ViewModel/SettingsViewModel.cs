@@ -4,15 +4,13 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using PopupTranslator.Annotations;
 
-namespace PopupTranslator
+namespace PopupTranslator.ViewModel
 {
     public sealed class SettingsViewModel : INotifyPropertyChanged
     {
         private readonly IHotkeyService hotkeyService;
         private Key actionKeyPressed;
         private ModifierKeys modifierKeysPressed;
-
-        public event EventHandler RequestedClose;
 
         public SettingsViewModel(IHotkeyService hotkeyService)
         {
@@ -42,6 +40,8 @@ namespace PopupTranslator
         public ICommand ApplySettingsCommand => new RelayCommand(ApplySettings);
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public event EventHandler RequestedClose;
 
         private void ApplySettings(object obj)
         {

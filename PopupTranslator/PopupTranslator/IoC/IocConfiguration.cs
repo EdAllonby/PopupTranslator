@@ -1,4 +1,5 @@
 ﻿using Ninject.Modules;
+using PopupTranslator.ViewModel;
 
 namespace PopupTranslator.IoC
 {
@@ -14,12 +15,12 @@ namespace PopupTranslator.IoC
         private void ConfigureServices()
         {
             Bind<ITranslator>().To<GoogleTranslator>().InSingletonScope();
-            Bind<IHotkeyService>().To<HotkeyService>().InSingletonScope(); 
+            Bind<IHotkeyService>().To<HotkeyService>().InSingletonScope();
         }
 
         private void ConfigureViews()
         {
-            Bind<MainViewModel>().ToSelf().InTransientScope(); 
+            Bind<MainViewModel>().ToSelf().InTransientScope();
             Bind<ContextMenuViewModel>().ToSelf().InTransientScope();
             Bind<SettingsViewModel>().ToSelf().InTransientScope();
         }

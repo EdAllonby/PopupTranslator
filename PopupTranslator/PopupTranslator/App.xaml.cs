@@ -1,9 +1,8 @@
 ﻿using System.Windows;
-using System.Windows.Input;
 using Hardcodet.Wpf.TaskbarNotification;
 using NHotkey;
-using NHotkey.Wpf;
 using PopupTranslator.IoC;
+using PopupTranslator.View;
 
 namespace PopupTranslator
 {
@@ -26,7 +25,7 @@ namespace PopupTranslator
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             var taskbarIcon = new TaskbarIcon {ContextMenu = new ContextMenuView()};
-            
+
             mainWindow = new MainWindow();
         }
 

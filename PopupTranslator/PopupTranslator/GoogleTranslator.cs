@@ -57,12 +57,12 @@ namespace PopupTranslator
         public async Task<string> TranslateAsync(string sourceText, Language sourceLanguage, Language targetLanguage)
         {
             ResetState();
-            DateTime tmStart = DateTime.Now;
-            string translation = string.Empty;
+            var tmStart = DateTime.Now;
+            var translation = string.Empty;
 
             try
             {
-                string outputFile = await SendTranslationRequestAsync(sourceText, sourceLanguage, targetLanguage);
+                var outputFile = await SendTranslationRequestAsync(sourceText, sourceLanguage, targetLanguage);
                 translation = ParseTranslationHtml(sourceLanguage, targetLanguage, outputFile, translation);
             }
             catch (Exception exception)
@@ -84,11 +84,11 @@ namespace PopupTranslator
 
         private static async Task<string> SendTranslationRequestAsync(string sourceText, Language sourceLanguage, Language targetLanguage)
         {
-            string requestUrl = CreateRequestUrl(sourceText, sourceLanguage, targetLanguage);
+            var requestUrl = CreateRequestUrl(sourceText, sourceLanguage, targetLanguage);
 
-            string outputFile = Path.GetTempFileName();
+            var outputFile = Path.GetTempFileName();
 
-            using (WebClient webClient = new WebClient())
+            using (var webClient = new WebClient())
             {
                 webClient.Headers.Add("user-agent", UserAgent);
                 await webClient.DownloadFileTaskAsync(requestUrl, outputFile);
@@ -107,15 +107,15 @@ namespace PopupTranslator
             if (File.Exists(outputFile))
             {
                 // Get phrase collection
-                string text = File.ReadAllText(outputFile);
-                int index = text.IndexOf($",,\"{sourceLanguage.Identifier}\"", StringComparison.Ordinal);
+                var text = File.ReadAllText(outputFile);
+                var index = text.IndexOf($",,\"{sourceLanguage.Identifier}\"", StringComparison.Ordinal);
                 if (index == -1)
                 {
                     // Translation of single word
-                    int startQuote = text.IndexOf('\"');
+                    var startQuote = text.IndexOf('\"');
                     if (startQuote != -1)
                     {
-                        int endQuote = text.IndexOf('\"', startQuote + 1);
+                        var endQuote = text.IndexOf('\"', startQuote + 1);
                         if (endQuote != -1)
                         {
                             translation = text.Substring(startQuote + 1, endQuote - startQuote - 1);
@@ -132,10 +132,10 @@ namespace PopupTranslator
                     text = text.Replace("\",\"", "\"");
 
                     // Get translated phrases
-                    string[] phrases = text.Split(new[] {'\"'}, StringSplitOptions.RemoveEmptyEntries);
-                    for (int i = 0; (i < phrases.Length); i += 2)
+                    var phrases = text.Split(new[] {'\"'}, StringSplitOptions.RemoveEmptyEntries);
+                    for (var i = 0; (i < phrases.Length); i += 2)
                     {
-                        string translatedPhrase = phrases[i];
+                        var translatedPhrase = phrases[i];
                         if (translatedPhrase.StartsWith(",,"))
                         {
                             i--;

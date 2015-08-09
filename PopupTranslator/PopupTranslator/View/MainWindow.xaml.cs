@@ -1,8 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 
-namespace PopupTranslator
+namespace PopupTranslator.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -11,24 +10,14 @@ namespace PopupTranslator
     {
         public MainWindow()
         {
-            try
-            {
-
-
             InitializeComponent();
-            }
-            catch (Exception)
-            {
 
-                throw;
-            }
-            Loaded += (sender, e) =>
-                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            Loaded += (sender, e) => MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
-            Rect desktopWorkingArea = SystemParameters.WorkArea;
+            var desktopWorkingArea = SystemParameters.WorkArea;
             Left = desktopWorkingArea.Right - Width;
             Top = desktopWorkingArea.Bottom - Height;
         }

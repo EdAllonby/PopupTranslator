@@ -1,4 +1,6 @@
-﻿namespace PopupTranslator.IoC
+﻿using PopupTranslator.ViewModel;
+
+namespace PopupTranslator.IoC
 {
     internal class ViewModelLocator
     {

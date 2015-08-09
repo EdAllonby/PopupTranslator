@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace PopupTranslator
+namespace PopupTranslator.ViewModel
 {
     internal class ContextItemViewModel
     {

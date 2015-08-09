@@ -12,9 +12,9 @@ namespace PopupTranslator
             HotkeyManager.Current.AddOrReplace("TranslateHotkey", ActionKey, ModifierKeys, true, OnTranslateHotkeyPressed);
         }
 
-        public ModifierKeys ModifierKeys { get; private set; } = ModifierKeys.Control | ModifierKeys.Alt;
+        public ModifierKeys ModifierKeys { get; } = ModifierKeys.Control | ModifierKeys.Alt;
 
-        public Key ActionKey { get; private set; } = Key.Down;
+        public Key ActionKey { get; } = Key.Down;
 
         public void SetNewHotkeys(Key actionKey, ModifierKeys modifierKeys)
         {

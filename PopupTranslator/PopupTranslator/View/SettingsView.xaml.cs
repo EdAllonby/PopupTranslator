@@ -1,7 +1,8 @@
-﻿using System.Windows;
+﻿using System;
 using System.Windows.Input;
+using PopupTranslator.ViewModel;
 
-namespace PopupTranslator
+namespace PopupTranslator.View
 {
     /// <summary>
     /// Interaction logic for SettingsView.xaml
@@ -13,19 +14,19 @@ namespace PopupTranslator
         public SettingsView()
         {
             InitializeComponent();
-            viewModel = (SettingsViewModel)DataContext;
+            viewModel = (SettingsViewModel) DataContext;
             viewModel.RequestedClose += OnRequestedClose;
         }
 
-        private void OnRequestedClose(object sender, System.EventArgs e)
+        private void OnRequestedClose(object sender, EventArgs e)
         {
             Close();
         }
 
         private void SettingsView_OnKeyDown(object sender, KeyEventArgs e)
         {
-            ModifierKeys modifiersPressed = Keyboard.Modifiers;
-            viewModel.ActionKeyPressed  = e.Key;
+            var modifiersPressed = Keyboard.Modifiers;
+            viewModel.ActionKeyPressed = e.Key;
             viewModel.ModifierKeysPressed = modifiersPressed;
         }
     }

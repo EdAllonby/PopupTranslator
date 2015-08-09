@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace PopupTranslator
+namespace PopupTranslator.ViewModel
 {
     public class RelayCommand : ICommand
     {
@@ -58,7 +58,7 @@ namespace PopupTranslator
 
         public void OnCanExecuteChanged()
         {
-            EventHandler handler = CanExecuteChangedInternal;
+            var handler = CanExecuteChangedInternal;
             handler?.Invoke(this, EventArgs.Empty);
         }
 

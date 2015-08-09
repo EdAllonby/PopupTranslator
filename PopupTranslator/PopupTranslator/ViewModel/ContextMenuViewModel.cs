@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
+using PopupTranslator.View;
 
-namespace PopupTranslator
+namespace PopupTranslator.ViewModel
 {
-    class ContextMenuViewModel
+    internal class ContextMenuViewModel
     {
-        public ObservableCollection<ContextItemViewModel> Actions { get; set; }
-
         public ContextMenuViewModel()
         {
             Actions = new ObservableCollection<ContextItemViewModel>
@@ -17,9 +15,11 @@ namespace PopupTranslator
             };
         }
 
+        public ObservableCollection<ContextItemViewModel> Actions { get; set; }
+
         private void OpenSettings(object obj)
         {
-            SettingsView settingsMenuView = new SettingsView();
+            var settingsMenuView = new SettingsView();
             settingsMenuView.Show();
         }
 
