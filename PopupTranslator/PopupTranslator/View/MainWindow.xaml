@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Loaded="OnWindowLoaded"
-        Title="MainWindow" Height="200" Width="500"
+        Title="Translate" Height="200" Width="500"
         DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}">
     <Grid>
         <Grid.RowDefinitions>

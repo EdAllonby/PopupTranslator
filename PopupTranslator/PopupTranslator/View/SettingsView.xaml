@@ -17,6 +17,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Vertical">
+                <Image Source="/PopupTranslator;component/Icons/TranslateLogo.ico"></Image>
                 <Label Content="Modifier Keys:" />
                 <Label Content="{Binding ModifierKeysPressed}" />
             </StackPanel>
