@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -12,31 +10,14 @@ namespace PopupTranslator
     /// <summary>
     /// Translates text using Google's online language tools.
     /// </summary>
-    public class Translator
+    public class GoogleTranslator : ITranslator
     {
+        private const string UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+
         /// <summary>
         /// The language to translation mode map.
         /// </summary>
         private static List<Language> languages;
-
-        private const string UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
-
-        /// <summary>
-        /// Gets the supported languages.
-        /// </summary>
-        public static IEnumerable<Language> Languages
-        {
-            get
-            {
-                EnsureInitialized();
-                return languages;
-            }
-        }
-
-        /// <summary>
-        /// Gets the time taken to perform the translation.
-        /// </summary>
-        public TimeSpan TranslationTime { get; private set; }
 
         /// <summary>
         /// Gets the url used to speak the translation.
@@ -50,28 +31,43 @@ namespace PopupTranslator
         public Exception Error { get; private set; }
 
         /// <summary>
+        /// Gets the time taken to perform the translation.
+        /// </summary>
+        public TimeSpan TranslationTime { get; private set; }
+
+        /// <summary>
+        /// Gets the supported languages.
+        /// </summary>
+        public IEnumerable<Language> Languages
+        {
+            get
+            {
+                EnsureInitialized();
+                return languages;
+            }
+        }
+
+        /// <summary>
         /// Translates the specified source text.
         /// </summary>
         /// <param name="sourceText">The source text.</param>
         /// <param name="sourceLanguage">The source language.</param>
         /// <param name="targetLanguage">The target language.</param>
         /// <returns>The translation.</returns>
-        public async Task<string> TranslateAsync(string sourceText, string sourceLanguage, string targetLanguage)
+        public async Task<string> TranslateAsync(string sourceText, Language sourceLanguage, Language targetLanguage)
         {
-            Error = null;
-            TranslationSpeechUrl = null;
-            TranslationTime = TimeSpan.Zero;
+            ResetState();
             DateTime tmStart = DateTime.Now;
             string translation = string.Empty;
 
             try
             {
-                string outputFile = await SendTranslationRequest(sourceText, sourceLanguage, targetLanguage);
+                string outputFile = await SendTranslationRequestAsync(sourceText, sourceLanguage, targetLanguage);
                 translation = ParseTranslationHtml(sourceLanguage, targetLanguage, outputFile, translation);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Error = ex;
+                Error = exception;
             }
 
             // Return result
@@ -79,7 +75,14 @@ namespace PopupTranslator
             return translation;
         }
 
-        private static async Task<string> SendTranslationRequest(string sourceText, string sourceLanguage, string targetLanguage)
+        private void ResetState()
+        {
+            Error = null;
+            TranslationSpeechUrl = null;
+            TranslationTime = TimeSpan.Zero;
+        }
+
+        private static async Task<string> SendTranslationRequestAsync(string sourceText, Language sourceLanguage, Language targetLanguage)
         {
             string requestUrl = CreateRequestUrl(sourceText, sourceLanguage, targetLanguage);
 
@@ -94,18 +97,18 @@ namespace PopupTranslator
             return outputFile;
         }
 
-        private static string CreateRequestUrl(string sourceText, string sourceLanguage, string targetLanguage)
+        private static string CreateRequestUrl(string sourceText, Language sourceLanguage, Language targetLanguage)
         {
-            return $"https://translate.google.com/translate_a/single?client=t&sl={LanguageEnumToIdentifier(sourceLanguage)}&tl={LanguageEnumToIdentifier(targetLanguage)}&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qc&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&source=btn&ssel=0&tsel=0&kc=0&q={HttpUtility.UrlEncode(sourceText)}";
+            return $"https://translate.google.com/translate_a/single?client=t&sl={sourceLanguage.Identifier}&tl={targetLanguage.Identifier}&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qc&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&source=btn&ssel=0&tsel=0&kc=0&q={HttpUtility.UrlEncode(sourceText)}";
         }
 
-        private string ParseTranslationHtml(string sourceLanguage, string targetLanguage, string outputFile, string translation)
+        private string ParseTranslationHtml(Language sourceLanguage, Language targetLanguage, string outputFile, string translation)
         {
             if (File.Exists(outputFile))
             {
                 // Get phrase collection
                 string text = File.ReadAllText(outputFile);
-                int index = text.IndexOf($",,\"{LanguageEnumToIdentifier(sourceLanguage)}\"", StringComparison.Ordinal);
+                int index = text.IndexOf($",,\"{sourceLanguage.Identifier}\"", StringComparison.Ordinal);
                 if (index == -1)
                 {
                     // Translation of single word
@@ -130,7 +133,7 @@ namespace PopupTranslator
 
                     // Get translated phrases
                     string[] phrases = text.Split(new[] {'\"'}, StringSplitOptions.RemoveEmptyEntries);
-                    for (int i = 0; (i < phrases.Count()); i += 2)
+                    for (int i = 0; (i < phrases.Length); i += 2)
                     {
                         string translatedPhrase = phrases[i];
                         if (translatedPhrase.StartsWith(",,"))
@@ -151,21 +154,10 @@ namespace PopupTranslator
                 translation = translation.Replace(" ;", ";");
 
                 // And translation speech URL
-                TranslationSpeechUrl = $"https://translate.google.com/translate_tts?ie=UTF-8&q={HttpUtility.UrlEncode(translation)}&tl={LanguageEnumToIdentifier(targetLanguage)}&total=1&idx=0&textlen={translation.Length}&client=t";
+                TranslationSpeechUrl = $"https://translate.google.com/translate_tts?ie=UTF-8&q={HttpUtility.UrlEncode(translation)}&tl={targetLanguage.Identifier}&total=1&idx=0&textlen={translation.Length}&client=t";
             }
 
             return translation;
-        }
-
-        /// <summary>
-        /// Converts a language to its identifier.
-        /// </summary>
-        /// <param name="language">The language."</param>
-        /// <returns>The identifier or <see cref="string.Empty" /> if none.</returns>
-        private static string LanguageEnumToIdentifier(string language)
-        {
-            EnsureInitialized();
-            return languages.FirstOrDefault(x => x.Name.Equals(language))?.Identifier;
         }
 
         /// <summary>

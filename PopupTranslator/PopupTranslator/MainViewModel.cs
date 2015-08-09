@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using PopupTranslator.Annotations;
@@ -8,7 +9,7 @@ namespace PopupTranslator
     public class MainViewModel : INotifyPropertyChanged
     {
         private string textToTranslate;
-        private readonly Translator translator = new Translator();
+        private readonly GoogleTranslator googleTranslator = new GoogleTranslator();
         private string translatedText;
 
         public string TextToTranslate
@@ -43,7 +44,10 @@ namespace PopupTranslator
 
         public async void Translate(object obj)
         {
-            TranslatedText = await translator.TranslateAsync(textToTranslate, "English", "Chinese");
+            Language englishLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("English"));
+            Language chineseLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("Chinese"));
+
+            TranslatedText = await googleTranslator.TranslateAsync(textToTranslate, englishLanguage, chineseLanguage);
         }
 
         [NotifyPropertyChangedInvocator]
