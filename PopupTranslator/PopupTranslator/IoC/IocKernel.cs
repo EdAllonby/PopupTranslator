@@ -1,7 +1,7 @@
 ﻿using Ninject;
 using Ninject.Modules;
 
-namespace PopupTranslator
+namespace PopupTranslator.IoC
 {
     public static class IocKernel
     {

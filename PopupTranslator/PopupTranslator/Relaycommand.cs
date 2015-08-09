@@ -59,11 +59,7 @@ namespace PopupTranslator
         public void OnCanExecuteChanged()
         {
             EventHandler handler = CanExecuteChangedInternal;
-            if (handler != null)
-            {
-                //DispatcherHelper.BeginInvokeOnUIThread(() => handler.Invoke(this, EventArgs.Empty));
-                handler.Invoke(this, EventArgs.Empty);
-            }
+            handler?.Invoke(this, EventArgs.Empty);
         }
 
         public void Destroy()

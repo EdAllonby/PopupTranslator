@@ -1,5 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Net.Mime;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace PopupTranslator
@@ -19,7 +19,8 @@ namespace PopupTranslator
 
         private void OpenSettings(object obj)
         {
-            throw new System.NotImplementedException();
+            SettingsView settingsMenuView = new SettingsView();
+            settingsMenuView.Show();
         }
 
         private void Exit(object obj)

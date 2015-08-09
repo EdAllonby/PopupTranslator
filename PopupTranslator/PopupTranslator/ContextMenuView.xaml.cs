@@ -3,9 +3,9 @@
     /// <summary>
     /// Interaction logic for SettingsMenuView.xaml
     /// </summary>
-    public partial class SettingsMenuView
+    public partial class ContextMenuView
     {
-        public SettingsMenuView()
+        public ContextMenuView()
         {
             InitializeComponent();
         }

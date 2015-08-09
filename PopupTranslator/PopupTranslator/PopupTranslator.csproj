@@ -72,8 +72,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ContextItemViewModel.cs" />
-    <Compile Include="IocConfiguration.cs" />
-    <Compile Include="IocKernel.cs" />
+    <Compile Include="HotkeyService.cs" />
+    <Compile Include="IHotkeyService.cs" />
+    <Compile Include="IoC\IocConfiguration.cs" />
+    <Compile Include="IoC\IocKernel.cs" />
     <Compile Include="ITranslator.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="MainViewModel.cs" />
@@ -84,7 +86,11 @@
       <DependentUpon>ContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ContextMenuViewModel.cs" />
-    <Compile Include="ViewModelLocator.cs" />
+    <Compile Include="SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsViewModel.cs" />
+    <Compile Include="IoC\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -98,6 +104,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ContextMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -130,6 +140,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
