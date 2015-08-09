@@ -6,13 +6,22 @@ namespace PopupTranslator.IoC
     {
         public override void Load()
         {
-            Bind<ITranslator>().To<GoogleTranslator>().InSingletonScope(); // Reuse same storage every time
-            Bind<IHotkeyService>().To<HotkeyService>().InSingletonScope(); // Reuse same storage every time
+            ConfigureServices();
 
-            Bind<MainViewModel>().ToSelf().InTransientScope(); // Create new instance every time
-            Bind<ContextMenuViewModel>().ToSelf().InTransientScope(); // Create new instance every time
-            Bind<SettingsViewModel>().ToSelf().InTransientScope(); // Create new instance every time
+            ConfigureViews();
+        }
 
+        private void ConfigureServices()
+        {
+            Bind<ITranslator>().To<GoogleTranslator>().InSingletonScope();
+            Bind<IHotkeyService>().To<HotkeyService>().InSingletonScope(); 
+        }
+
+        private void ConfigureViews()
+        {
+            Bind<MainViewModel>().ToSelf().InTransientScope(); 
+            Bind<ContextMenuViewModel>().ToSelf().InTransientScope();
+            Bind<SettingsViewModel>().ToSelf().InTransientScope();
         }
     }
 }
