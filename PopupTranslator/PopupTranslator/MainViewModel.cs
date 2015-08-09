@@ -9,8 +9,13 @@ namespace PopupTranslator
     public class MainViewModel : INotifyPropertyChanged
     {
         private string textToTranslate;
-        private readonly GoogleTranslator googleTranslator = new GoogleTranslator();
+        private readonly ITranslator googleTranslator;
         private string translatedText;
+
+        public MainViewModel(ITranslator translator)
+        {
+            googleTranslator = translator;
+        }
 
         public string TextToTranslate
         {

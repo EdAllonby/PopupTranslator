@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PopupTranslator
@@ -10,7 +11,17 @@ namespace PopupTranslator
     {
         public MainWindow()
         {
+            try
+            {
+
+
             InitializeComponent();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             Loaded += (sender, e) =>
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
