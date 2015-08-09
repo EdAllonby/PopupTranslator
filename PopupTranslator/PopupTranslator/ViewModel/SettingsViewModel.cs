@@ -37,17 +37,32 @@ namespace PopupTranslator.ViewModel
             }
         }
 
+        public string CurrentSetHotkeys => $"{hotkeyService.ModifierKeys} + {hotkeyService.ActionKey}";
+
+        public ICommand ApplySettingsAndCloseCommand => new RelayCommand(ApplySettingsAndClose);
         public ICommand ApplySettingsCommand => new RelayCommand(ApplySettings);
+        public ICommand CloseCommand => new RelayCommand(CloseSettings);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public event EventHandler RequestedClose;
 
+        private void ApplySettingsAndClose(object obj)
+        {
+            ApplySettings(null);
+
+            CloseSettings(null);
+        }
+
+        private void CloseSettings(object obj)
+        {
+            RequestedClose?.Invoke(this, EventArgs.Empty);
+        }
+
         private void ApplySettings(object obj)
         {
             hotkeyService.SetNewHotkeys(ActionKeyPressed, ModifierKeysPressed);
-
-            RequestedClose?.Invoke(this, EventArgs.Empty);
+            OnPropertyChanged(nameof(CurrentSetHotkeys));
         }
 
         [NotifyPropertyChangedInvocator]

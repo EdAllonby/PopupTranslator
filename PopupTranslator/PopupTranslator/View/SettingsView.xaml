@@ -10,27 +10,46 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Row="0">
+
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
+            <Label Content="Current Key Combination:" />
+            <Label Content="{Binding CurrentSetHotkeys}" />
+        </StackPanel>
+
+
+        <Grid Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Vertical">
-                <Image Source="/PopupTranslator;component/Icons/TranslateLogo.ico"></Image>
+
+            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
                 <Label Content="Modifier Keys:" />
                 <Label Content="{Binding ModifierKeysPressed}" />
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Vertical">
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
                 <Label Content="Action Key:" />
                 <Label Content="{Binding ActionKeyPressed}" />
             </StackPanel>
 
         </Grid>
 
-        <Button Grid.Row="2" Height="24" Width="70" Content="OK" HorizontalAlignment="Right" Margin="10"
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+
+            <Button Height="24" Width="70" Content="OK"  Margin="5"
+                Command="{Binding ApplySettingsAndCloseCommand}" />
+
+            <Button Height="24" Width="70" Content="Apply"  Margin="5"
                 Command="{Binding ApplySettingsCommand}" />
+
+
+            <Button Height="24" Width="70" Content="Close"  Margin="5"
+                Command="{Binding CloseCommand}" />
+
+        </StackPanel>
+       
 
     </Grid>
 </Window>

@@ -30,9 +30,14 @@ namespace PopupTranslator
 
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-            var taskbarIcon = new TaskbarIcon {ContextMenu = new ContextMenuView()};
+            var taskbarIcon = new TaskbarIcon
+            {
+                ContextMenu = new ContextMenuView(),
+                Icon = PopupTranslator.Properties.Resources.TranslateLogo,
+                ToolTipText = "Popup Translator"
+            };
 
-            taskbarIcon.Icon = PopupTranslator.Properties.Resources.TranslateLogo; // ConvertToImageSource(PopupTranslator.Properties.Resources.TranslateLogo);
+            taskbarIcon.TrayMouseDoubleClick += TaskbarIcon_TrayMouseDoubleClick;
 
             mainWindow = new MainWindow();
         }
@@ -42,7 +47,17 @@ namespace PopupTranslator
             return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
         }
 
-        private void OnHotkeyPressed(object sender, HotkeyEventArgs eventArgs)
+        private void OnHotkeyPressed(object sender, HotkeyEventArgs e)
+        {
+            OpenMainWindow();
+        }
+
+        private void TaskbarIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            OpenMainWindow();
+        }
+
+        private void OpenMainWindow()
         {
             if (!mainWindow.IsActive)
             {
