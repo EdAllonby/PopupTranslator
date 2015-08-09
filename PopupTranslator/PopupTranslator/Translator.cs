@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace PopupTranslator
@@ -16,6 +18,8 @@ namespace PopupTranslator
         /// The language to translation mode map.
         /// </summary>
         private static List<Language> languages;
+
+        private const string UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
 
         /// <summary>
         /// Gets the supported languages.
@@ -52,7 +56,7 @@ namespace PopupTranslator
         /// <param name="sourceLanguage">The source language.</param>
         /// <param name="targetLanguage">The target language.</param>
         /// <returns>The translation.</returns>
-        public string Translate(string sourceText, string sourceLanguage, string targetLanguage)
+        public async Task<string> TranslateAsync(string sourceText, string sourceLanguage, string targetLanguage)
         {
             Error = null;
             TranslationSpeechUrl = null;
@@ -62,8 +66,7 @@ namespace PopupTranslator
 
             try
             {
-                string outputFile = SendTranslationRequest(sourceText, sourceLanguage, targetLanguage);
-
+                string outputFile = await SendTranslationRequest(sourceText, sourceLanguage, targetLanguage);
                 translation = ParseTranslationHtml(sourceLanguage, targetLanguage, outputFile, translation);
             }
             catch (Exception ex)
@@ -76,18 +79,24 @@ namespace PopupTranslator
             return translation;
         }
 
-        private static string SendTranslationRequest(string sourceText, string sourceLanguage, string targetLanguage)
+        private static async Task<string> SendTranslationRequest(string sourceText, string sourceLanguage, string targetLanguage)
         {
-            string url = $"https://translate.google.com/translate_a/single?client=t&sl={LanguageEnumToIdentifier(sourceLanguage)}&tl={LanguageEnumToIdentifier(targetLanguage)}&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qc&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&source=btn&ssel=0&tsel=0&kc=0&q={HttpUtility.UrlEncode(sourceText)}";
+            string requestUrl = CreateRequestUrl(sourceText, sourceLanguage, targetLanguage);
 
             string outputFile = Path.GetTempFileName();
+
             using (WebClient webClient = new WebClient())
             {
-                webClient.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
-                webClient.DownloadFile(url, outputFile);
+                webClient.Headers.Add("user-agent", UserAgent);
+                await webClient.DownloadFileTaskAsync(requestUrl, outputFile);
             }
 
             return outputFile;
+        }
+
+        private static string CreateRequestUrl(string sourceText, string sourceLanguage, string targetLanguage)
+        {
+            return $"https://translate.google.com/translate_a/single?client=t&sl={LanguageEnumToIdentifier(sourceLanguage)}&tl={LanguageEnumToIdentifier(targetLanguage)}&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qc&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&source=btn&ssel=0&tsel=0&kc=0&q={HttpUtility.UrlEncode(sourceText)}";
         }
 
         private string ParseTranslationHtml(string sourceLanguage, string targetLanguage, string outputFile, string translation)

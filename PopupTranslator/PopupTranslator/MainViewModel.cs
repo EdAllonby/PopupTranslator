@@ -41,9 +41,9 @@ namespace PopupTranslator
             return true;
         }
 
-        public void Translate(object obj)
+        public async void Translate(object obj)
         {
-            TranslatedText = translator.Translate(textToTranslate, "English", "Chinese");
+            TranslatedText = await translator.TranslateAsync(textToTranslate, "English", "Chinese");
         }
 
         [NotifyPropertyChangedInvocator]
