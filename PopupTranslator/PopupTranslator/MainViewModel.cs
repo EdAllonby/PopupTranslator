@@ -17,6 +17,7 @@ namespace PopupTranslator
             set
             {
                 textToTranslate = value;
+                Translate(TextToTranslate);
                 OnPropertyChanged();
             }
         }

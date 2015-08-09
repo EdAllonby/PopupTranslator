@@ -18,8 +18,9 @@
                 <KeyBinding Command="{Binding TranslateCommand}" Key="Enter" />
             </TextBox.InputBindings>
         </TextBox>
-        
-        <Label Grid.Row="1" Content="{Binding TranslatedText}" Width="300" FontSize="20" VerticalContentAlignment="Top" HorizontalContentAlignment="Center" />
-        
+
+        <Label Grid.Row="1" Content="{Binding TranslatedText}" Width="300" FontSize="20" VerticalContentAlignment="Top"
+               HorizontalContentAlignment="Center" />
+
     </Grid>
 </Window>

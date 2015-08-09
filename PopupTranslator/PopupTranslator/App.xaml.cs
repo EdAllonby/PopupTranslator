@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using NHotkey;
 using NHotkey.Wpf;
@@ -13,10 +10,9 @@ namespace PopupTranslator
     /// </summary>
     public partial class App
     {
-        private readonly MainWindow mainWindow = new MainWindow();
-
         private const ModifierKeys ModifierKeys = System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Alt;
         private const Key ActionKey = Key.Down;
+        private readonly MainWindow mainWindow = new MainWindow();
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -25,7 +21,7 @@ namespace PopupTranslator
             HotkeyManager.Current.AddOrReplace("Increment", ActionKey, ModifierKeys, OnIncrement);
         }
 
-        private void OnIncrement(object o, HotkeyEventArgs e)
+        private void OnIncrement(object sender, HotkeyEventArgs eventArgs)
         {
             if (!mainWindow.IsActive)
             {
@@ -35,13 +31,6 @@ namespace PopupTranslator
             {
                 mainWindow.Hide();
             }
-        }
-        
-        public string TranslateText(string input, string languagePair)
-        {
-            var translation = new Translator();
-
-            return translation.Translate(input, "English", "Chinese");
         }
     }
 }
