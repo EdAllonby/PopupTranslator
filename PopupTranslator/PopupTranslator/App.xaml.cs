@@ -48,7 +48,7 @@ namespace PopupTranslator
 
         private void ToggleMainWindow()
         {
-            if (!mainWindow.IsActive)
+            if (!mainWindow.IsActive || mainWindow.Visibility == Visibility.Hidden)
             {
                 mainWindow.Show();
             }

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PopupTranslator.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Loaded="OnWindowLoaded"
+        Loaded="OnWindowLoaded" Deactivated="OnWindowDeactivated"
         Title="Popup Translator" Height="200" Width="500"
         DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}">
     <Grid>

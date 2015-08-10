@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PopupTranslator.View
@@ -20,6 +21,11 @@ namespace PopupTranslator.View
             var desktopWorkingArea = SystemParameters.WorkArea;
             Left = desktopWorkingArea.Right - Width;
             Top = desktopWorkingArea.Bottom - Height;
+        }
+
+        private void OnWindowDeactivated(object sender, EventArgs e)
+        {
+            Hide();
         }
     }
 }
