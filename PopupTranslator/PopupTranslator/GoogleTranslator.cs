@@ -20,6 +20,9 @@ namespace PopupTranslator
         /// </summary>
         private static List<Language> languages;
 
+        private Language sourceLanguage;
+        private Language targetLanguage;
+
         public GoogleTranslator()
         {
             SourceLanguage = LanguageNameToSupportedLanguage("English");
@@ -45,12 +48,32 @@ namespace PopupTranslator
         /// <summary>
         /// The source language of the translation.
         /// </summary>
-        public Language SourceLanguage { get; set; }
+        public Language SourceLanguage
+        {
+            get { return sourceLanguage; }
+            set
+            {
+                if (DoesTranslatorContainLanguage(value))
+                {
+                    sourceLanguage = value;
+                }
+            }
+        }
 
         /// <summary>
         /// The target language of the translation.
         /// </summary>
-        public Language TargetLanguage { get; set; }
+        public Language TargetLanguage
+        {
+            get { return targetLanguage; }
+            set
+            {
+                if (DoesTranslatorContainLanguage(value))
+                {
+                    targetLanguage = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the supported languages.
@@ -87,6 +110,16 @@ namespace PopupTranslator
 
             TranslationTime = DateTime.Now - tmStart;
             return translation;
+        }
+
+        public Language LanguageNameToSupportedLanguage(string languageName)
+        {
+            return Languages.FirstOrDefault(supportedLanguage => supportedLanguage.Name.Equals(languageName, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        private bool DoesTranslatorContainLanguage(Language value)
+        {
+            return value != null && Languages.Contains(value);
         }
 
         private void ResetState()
@@ -182,9 +215,14 @@ namespace PopupTranslator
             IEnumerable<string> filteredPhrases = googleText.Split(new[] {'\"'}, StringSplitOptions.RemoveEmptyEntries).Where(x => !x.StartsWith(",,"));
             var translatedTextOptions = filteredPhrases.Where(x => !x.Equals(originalText)).ToList();
 
+            if (!translatedTextOptions.Any())
+            {
+                return Translation.EmptyTranslation();
+            }
+
             return translatedTextOptions.Count == 1
-                ? new Translation(CleanTranslationText(translatedTextOptions.First())) :
-                new Translation(CleanTranslationText(translatedTextOptions.First()), CleanTranslationText(translatedTextOptions.LastOrDefault()));
+                ? new Translation(CleanTranslationText(translatedTextOptions.First()))
+                : new Translation(CleanTranslationText(translatedTextOptions.First()), CleanTranslationText(translatedTextOptions.LastOrDefault()));
         }
 
         /// <summary>
@@ -196,11 +234,6 @@ namespace PopupTranslator
             {
                 SupportedLanguages();
             }
-        }
-
-        public Language LanguageNameToSupportedLanguage(string languageName)
-        {
-            return Languages.FirstOrDefault(supportedLanguage => supportedLanguage.Name.Equals(languageName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private static void SupportedLanguages()
