@@ -33,7 +33,7 @@ namespace PopupTranslator
 
             taskbarIcon.TrayMouseDoubleClick += OnTaskbarDoubleClick;
 
-            mainWindow = new MainWindow();
+            mainWindow = new MainWindow {ShowInTaskbar = false};
         }
 
         private void OnHotkeyPressed(object sender, HotkeyEventArgs e)
