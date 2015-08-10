@@ -64,7 +64,7 @@ namespace PopupTranslator
             try
             {
                 var outputFile = await SendTranslationRequestAsync(textToTranslate, sourceLanguage, targetLanguage);
-                translation = ParseTranslationHtml(textToTranslate, sourceLanguage, targetLanguage, outputFile);
+                translation = ParseTranslationHtml(textToTranslate.Trim(), sourceLanguage, targetLanguage, outputFile);
             }
             catch (Exception exception)
             {
@@ -128,16 +128,22 @@ namespace PopupTranslator
 
         private static Translation TranslateSingleWord(string text)
         {
-            var startQuote = text.IndexOf('\"');
-            if (startQuote != -1)
+            int startQuote = text.IndexOf('\"');
+
+            if (startQuote == -1)
             {
-                var endQuote = text.IndexOf('\"', startQuote + 1);
-                if (endQuote != -1)
-                {
-                    return new Translation(CleanTranslationText(text.Substring(startQuote + 1, endQuote - startQuote - 1)), string.Empty);
-                }
+                return Translation.EmptyTranslation();
             }
-            return Translation.EmptyTranslation();
+
+            int endQuote = text.IndexOf('\"', startQuote + 1);
+
+            if (endQuote == -1)
+            {
+                return Translation.EmptyTranslation();
+            }
+
+            string cleanedTranslation = CleanTranslationText(text.Substring(startQuote + 1, endQuote - startQuote - 1));
+            return new Translation(cleanedTranslation);
         }
 
         private static string CleanTranslationText(string translationText)
@@ -160,9 +166,12 @@ namespace PopupTranslator
             googleText = googleText.Replace("\",\"", "\"");
 
             // Get translated phrases
-            var possiblePhrases = googleText.Split(new[] {'\"'}, StringSplitOptions.RemoveEmptyEntries).Where(x => !x.StartsWith(",,")).Where(x => !x.Equals(originalText)).ToList();
+            IEnumerable<string> filteredPhrases = googleText.Split(new[] {'\"'}, StringSplitOptions.RemoveEmptyEntries).Where(x => !x.StartsWith(",,"));
+            var translatedTextOptions = filteredPhrases.Where(x => !x.Equals(originalText)).ToList();
 
-            return new Translation(possiblePhrases.First(), possiblePhrases.LastOrDefault());
+            return translatedTextOptions.Count == 1
+                ? new Translation(CleanTranslationText(translatedTextOptions.First()))
+                : new Translation(CleanTranslationText(translatedTextOptions.First()), CleanTranslationText(translatedTextOptions.LastOrDefault()));
         }
 
         /// <summary>

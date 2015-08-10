@@ -61,7 +61,7 @@ namespace PopupTranslator.ViewModel
         public async void Translate(object obj)
         {
             Language englishLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("English"));
-            Language chineseLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("Chinese"));
+            Language chineseLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("French"));
 
             Translation translation = await googleTranslator.TranslateAsync(textToTranslate, englishLanguage, chineseLanguage);
 
