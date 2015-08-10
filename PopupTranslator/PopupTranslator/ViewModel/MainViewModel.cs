@@ -1,12 +1,8 @@
-﻿using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using PopupTranslator.Annotations;
+﻿using System.Windows.Input;
 
 namespace PopupTranslator.ViewModel
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : ViewModelBase
     {
         private readonly ITranslator googleTranslator;
         private string optionalPhonetics;
@@ -51,8 +47,6 @@ namespace PopupTranslator.ViewModel
 
         public ICommand TranslateCommand => new RelayCommand(Translate, CanTranslate);
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private static bool CanTranslate(object obj)
         {
             return true;
@@ -64,12 +58,6 @@ namespace PopupTranslator.ViewModel
 
             TranslatedText = translation.TranslatedText;
             OptionalPhonetics = translation.OptionalPhonetics;
-        }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

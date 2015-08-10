@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using PopupTranslator.Utility;
 
 namespace PopupTranslator.ViewModel
 {
@@ -21,16 +22,12 @@ namespace PopupTranslator.ViewModel
 
         private void OpenSettings(object obj)
         {
-            var copy = OpenSettingsViewRequested;
-
-            copy?.Invoke(this, EventArgs.Empty);
+            OpenSettingsViewRequested.SafeFireEvent(this);
         }
 
         private void Exit(object obj)
         {
-            var copy = ExitApplicationRequested;
-
-            copy?.Invoke(this, EventArgs.Empty);
+            ExitApplicationRequested.SafeFireEvent(this);
         }
     }
 }

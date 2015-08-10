@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using PopupTranslator.Utility;
 
 namespace PopupTranslator.ViewModel
 {
@@ -58,8 +59,7 @@ namespace PopupTranslator.ViewModel
 
         public void OnCanExecuteChanged()
         {
-            var handler = CanExecuteChangedInternal;
-            handler?.Invoke(this, EventArgs.Empty);
+            CanExecuteChangedInternal.SafeFireEvent(this);
         }
 
         public void Destroy()

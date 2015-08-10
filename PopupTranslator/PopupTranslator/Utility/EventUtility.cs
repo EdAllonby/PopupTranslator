@@ -34,9 +34,9 @@ namespace PopupTranslator.Utility
             eventCopy?.Invoke(sender, eventArgs);
         }
 
-        public static void SafeFireEvent(PropertyChangedEventHandler unsafEventHandler, object sender, string propertyName)
+        public static void SafeFireEvent(this PropertyChangedEventHandler unsafeEventHandler, object sender, string propertyName)
         {
-            var eventCopy = unsafEventHandler;
+            var eventCopy = unsafeEventHandler;
 
             eventCopy?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
         }

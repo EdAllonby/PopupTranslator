@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Web.Security;
 using System.Windows.Input;
-using PopupTranslator.Annotations;
+using PopupTranslator.Utility;
 
 namespace PopupTranslator.ViewModel
 {
-    public sealed class SettingsViewModel : INotifyPropertyChanged
+    public sealed class SettingsViewModel : ViewModelBase
     {
         private readonly IHotkeyService hotkeyService;
         private readonly ITranslator translator;
@@ -79,8 +75,6 @@ namespace PopupTranslator.ViewModel
         public ICommand ApplySettingsCommand => new RelayCommand(ApplySettings);
         public ICommand CloseCommand => new RelayCommand(CloseSettings);
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public event EventHandler RequestedClose;
 
         private void ApplySettingsAndClose(object obj)
@@ -92,7 +86,7 @@ namespace PopupTranslator.ViewModel
 
         private void CloseSettings(object obj)
         {
-            RequestedClose?.Invoke(this, EventArgs.Empty);
+            RequestedClose.SafeFireEvent(this);
         }
 
         private void ApplySettings(object obj)
@@ -102,12 +96,6 @@ namespace PopupTranslator.ViewModel
             translator.TargetLanguage = selectedTargetLanguage;
 
             OnPropertyChanged(nameof(CurrentSetHotkeys));
-        }
-
-        [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
