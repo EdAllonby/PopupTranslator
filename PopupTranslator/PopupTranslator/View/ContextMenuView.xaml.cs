@@ -1,4 +1,7 @@
-﻿namespace PopupTranslator.View
+﻿using System.Windows;
+using PopupTranslator.ViewModel;
+
+namespace PopupTranslator.View
 {
     /// <summary>
     /// Interaction logic for SettingsMenuView.xaml
@@ -8,6 +11,21 @@
         public ContextMenuView()
         {
             InitializeComponent();
+
+            var viewModel = (ContextMenuViewModel) DataContext;
+            viewModel.OpenSettingsViewRequested += OnOpenSettingsViewRequested;
+            viewModel.ExitApplicationRequested += OnExitApplicationRequested;
+        }
+
+        private static void OnExitApplicationRequested(object sender, System.EventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private static void OnOpenSettingsViewRequested(object sender, System.EventArgs e)
+        {
+            var settingsView = new SettingsView();
+            settingsView.Show();
         }
     }
 }

@@ -38,15 +38,15 @@ namespace PopupTranslator
 
         private void OnHotkeyPressed(object sender, HotkeyEventArgs e)
         {
-            OpenMainWindow();
+            ToggleMainWindow();
         }
 
         private void OnTaskbarDoubleClick(object sender, RoutedEventArgs e)
         {
-            OpenMainWindow();
+            ToggleMainWindow();
         }
 
-        private void OpenMainWindow()
+        private void ToggleMainWindow()
         {
             if (!mainWindow.IsActive)
             {
