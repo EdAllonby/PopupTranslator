@@ -9,6 +9,7 @@ namespace PopupTranslator.ViewModel
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly ITranslator googleTranslator;
+        private string optionalPhonetics;
         private string textToTranslate;
         private string translatedText;
 
@@ -38,6 +39,16 @@ namespace PopupTranslator.ViewModel
             }
         }
 
+        public string OptionalPhonetics
+        {
+            get { return optionalPhonetics; }
+            set
+            {
+                optionalPhonetics = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand TranslateCommand => new RelayCommand(Translate, CanTranslate);
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -49,10 +60,13 @@ namespace PopupTranslator.ViewModel
 
         public async void Translate(object obj)
         {
-            var englishLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("English"));
-            var chineseLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("Chinese"));
+            Language englishLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("English"));
+            Language chineseLanguage = googleTranslator.Languages.FirstOrDefault(x => x.Name.Equals("Chinese"));
 
-            TranslatedText = await googleTranslator.TranslateAsync(textToTranslate, englishLanguage, chineseLanguage);
+            Translation translation = await googleTranslator.TranslateAsync(textToTranslate, englishLanguage, chineseLanguage);
+
+            TranslatedText = translation.TranslatedText;
+            OptionalPhonetics = translation.OptionalPhonetics;
         }
 
         [NotifyPropertyChangedInvocator]

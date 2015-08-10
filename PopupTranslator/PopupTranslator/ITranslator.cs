@@ -19,10 +19,10 @@ namespace PopupTranslator
         /// <summary>
         /// Translate between two languages in async.
         /// </summary>
-        /// <param name="sourceText">The text to translate.</param>
+        /// <param name="textToTranslate">The text to translate.</param>
         /// <param name="sourceLanguage">The source language.</param>
         /// <param name="targetLanguage">The target language.</param>
         /// <returns></returns>
-        Task<string> TranslateAsync(string sourceText, Language sourceLanguage, Language targetLanguage);
+        Task<Translation> TranslateAsync(string textToTranslate, Language sourceLanguage, Language targetLanguage);
     }
 }

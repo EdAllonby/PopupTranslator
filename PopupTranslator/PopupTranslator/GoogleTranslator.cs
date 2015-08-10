@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -50,20 +51,20 @@ namespace PopupTranslator
         /// <summary>
         /// Translates the specified source text.
         /// </summary>
-        /// <param name="sourceText">The source text.</param>
+        /// <param name="textToTranslate">The text to translate.</param>
         /// <param name="sourceLanguage">The source language.</param>
         /// <param name="targetLanguage">The target language.</param>
         /// <returns>The translation.</returns>
-        public async Task<string> TranslateAsync(string sourceText, Language sourceLanguage, Language targetLanguage)
+        public async Task<Translation> TranslateAsync(string textToTranslate, Language sourceLanguage, Language targetLanguage)
         {
             ResetState();
             var tmStart = DateTime.Now;
-            var translation = string.Empty;
+            var translation = Translation.EmptyTranslation();
 
             try
             {
-                var outputFile = await SendTranslationRequestAsync(sourceText, sourceLanguage, targetLanguage);
-                translation = ParseTranslationHtml(sourceLanguage, targetLanguage, outputFile, translation);
+                var outputFile = await SendTranslationRequestAsync(textToTranslate, sourceLanguage, targetLanguage);
+                translation = ParseTranslationHtml(textToTranslate, sourceLanguage, targetLanguage, outputFile);
             }
             catch (Exception exception)
             {
@@ -97,67 +98,71 @@ namespace PopupTranslator
             return outputFile;
         }
 
-        private static string CreateRequestUrl(string sourceText, Language sourceLanguage, Language targetLanguage)
+        private static string CreateRequestUrl(string googleText, Language sourceLanguage, Language targetLanguage)
         {
-            return $"https://translate.google.com/translate_a/single?client=t&sl={sourceLanguage.Identifier}&tl={targetLanguage.Identifier}&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qc&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&source=btn&ssel=0&tsel=0&kc=0&q={HttpUtility.UrlEncode(sourceText)}";
+            return $"https://translate.google.com/translate_a/single?client=t&sl={sourceLanguage.Identifier}&tl={targetLanguage.Identifier}&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qc&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&source=btn&ssel=0&tsel=0&kc=0&q={HttpUtility.UrlEncode(googleText)}";
         }
 
-        private string ParseTranslationHtml(Language sourceLanguage, Language targetLanguage, string outputFile, string translation)
+        private Translation ParseTranslationHtml(string originalText, Language sourceLanguage, Language targetLanguage, string outputFile)
         {
-            if (File.Exists(outputFile))
+            if (!File.Exists(outputFile))
             {
-                // Get phrase collection
-                var text = File.ReadAllText(outputFile);
-                var index = text.IndexOf($",,\"{sourceLanguage.Identifier}\"", StringComparison.Ordinal);
-                if (index == -1)
-                {
-                    // Translation of single word
-                    var startQuote = text.IndexOf('\"');
-                    if (startQuote != -1)
-                    {
-                        var endQuote = text.IndexOf('\"', startQuote + 1);
-                        if (endQuote != -1)
-                        {
-                            translation = text.Substring(startQuote + 1, endQuote - startQuote - 1);
-                        }
-                    }
-                }
-                else
-                {
-                    // Translation of phrase
-                    text = text.Substring(0, index);
-                    text = text.Replace("],[", ",");
-                    text = text.Replace("]", string.Empty);
-                    text = text.Replace("[", string.Empty);
-                    text = text.Replace("\",\"", "\"");
-
-                    // Get translated phrases
-                    var phrases = text.Split(new[] {'\"'}, StringSplitOptions.RemoveEmptyEntries);
-                    for (var i = 0; (i < phrases.Length); i += 2)
-                    {
-                        var translatedPhrase = phrases[i];
-                        if (translatedPhrase.StartsWith(",,"))
-                        {
-                            i--;
-                            continue;
-                        }
-                        translation += translatedPhrase + "  ";
-                    }
-                }
-
-                // Fix up translation
-                translation = translation.Trim();
-                translation = translation.Replace(" ?", "?");
-                translation = translation.Replace(" !", "!");
-                translation = translation.Replace(" ,", ",");
-                translation = translation.Replace(" .", ".");
-                translation = translation.Replace(" ;", ";");
-
-                // And translation speech URL
-                TranslationSpeechUrl = $"https://translate.google.com/translate_tts?ie=UTF-8&q={HttpUtility.UrlEncode(translation)}&tl={targetLanguage.Identifier}&total=1&idx=0&textlen={translation.Length}&client=t";
+                return Translation.EmptyTranslation();
             }
 
-            return translation;
+            // Get phrase collection
+            var text = File.ReadAllText(outputFile);
+            var index = text.IndexOf($",,\"{sourceLanguage.Identifier}\"", StringComparison.Ordinal);
+
+            if (index == -1)
+            {
+                return TranslateSingleWord(text);
+            }
+
+            text = text.Substring(0, index);
+            return TranslatePhrases(originalText, text);
+
+            // And translation speech URL
+            // TranslationSpeechUrl = $"https://translate.google.com/translate_tts?ie=UTF-8&q={HttpUtility.UrlEncode(translation)}&tl={targetLanguage.Identifier}&total=1&idx=0&textlen={translation.Length}&client=t";
+        }
+
+        private static Translation TranslateSingleWord(string text)
+        {
+            var startQuote = text.IndexOf('\"');
+            if (startQuote != -1)
+            {
+                var endQuote = text.IndexOf('\"', startQuote + 1);
+                if (endQuote != -1)
+                {
+                    return new Translation(CleanTranslationText(text.Substring(startQuote + 1, endQuote - startQuote - 1)), string.Empty);
+                }
+            }
+            return Translation.EmptyTranslation();
+        }
+
+        private static string CleanTranslationText(string translationText)
+        {
+            translationText = translationText.Trim();
+            translationText = translationText.Replace(" ?", "?");
+            translationText = translationText.Replace(" !", "!");
+            translationText = translationText.Replace(" ,", ",");
+            translationText = translationText.Replace(" .", ".");
+            translationText = translationText.Replace(" ;", ";");
+
+            return translationText;
+        }
+
+        private static Translation TranslatePhrases(string originalText, string googleText)
+        {
+            googleText = googleText.Replace("],[", ",");
+            googleText = googleText.Replace("]", string.Empty);
+            googleText = googleText.Replace("[", string.Empty);
+            googleText = googleText.Replace("\",\"", "\"");
+
+            // Get translated phrases
+            var possiblePhrases = googleText.Split(new[] {'\"'}, StringSplitOptions.RemoveEmptyEntries).Where(x => !x.StartsWith(",,")).Where(x => !x.Equals(originalText)).ToList();
+
+            return new Translation(possiblePhrases.First(), possiblePhrases.LastOrDefault());
         }
 
         /// <summary>

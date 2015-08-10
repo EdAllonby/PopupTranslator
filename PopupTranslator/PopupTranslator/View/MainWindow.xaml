@@ -8,7 +8,9 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
+
         <TextBox Grid.Row="0" Height="25" Width="300"
                  Text="{Binding TextToTranslate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
@@ -16,8 +18,12 @@
             </TextBox.InputBindings>
         </TextBox>
 
-        <Viewbox Grid.Row="1" Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10">
+        <Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Center" Margin="10">
             <TextBlock TextWrapping="Wrap" Text="{Binding TranslatedText}" />
+        </Viewbox>
+
+        <Viewbox Grid.Row="2" Stretch="Uniform" HorizontalAlignment="Center" Margin="10">
+            <TextBlock Text="{Binding OptionalPhonetics}" Foreground="Gray" />
         </Viewbox>
 
     </Grid>
