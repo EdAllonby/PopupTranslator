@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Web.Security;
 using System.Windows.Input;
 using PopupTranslator.Annotations;
 
@@ -25,6 +26,9 @@ namespace PopupTranslator.ViewModel
             SupportedLanguages = new ObservableCollection<Language>(translator.Languages);
             SelectedSourceLanguage = translator.SourceLanguage;
             SelectedTargetLanguage = translator.TargetLanguage;
+
+            ActionKeyPressed = hotkeyService.ActionKey;
+            ModifierKeysPressed = hotkeyService.ModifierKeys;
         }
 
         public ModifierKeys ModifierKeysPressed
