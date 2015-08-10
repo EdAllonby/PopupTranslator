@@ -20,6 +20,12 @@ namespace PopupTranslator
         /// </summary>
         private static List<Language> languages;
 
+        public GoogleTranslator()
+        {
+            SourceLanguage = LanguageNameToSupportedLanguage("English");
+            TargetLanguage = LanguageNameToSupportedLanguage("Chinese");
+        }
+
         /// <summary>
         /// Gets the url used to speak the translation.
         /// </summary>
@@ -37,6 +43,16 @@ namespace PopupTranslator
         public TimeSpan TranslationTime { get; private set; }
 
         /// <summary>
+        /// The source language of the translation.
+        /// </summary>
+        public Language SourceLanguage { get; set; }
+
+        /// <summary>
+        /// The target language of the translation.
+        /// </summary>
+        public Language TargetLanguage { get; set; }
+
+        /// <summary>
         /// Gets the supported languages.
         /// </summary>
         public IEnumerable<Language> Languages
@@ -52,10 +68,8 @@ namespace PopupTranslator
         /// Translates the specified source text.
         /// </summary>
         /// <param name="textToTranslate">The text to translate.</param>
-        /// <param name="sourceLanguage">The source language.</param>
-        /// <param name="targetLanguage">The target language.</param>
         /// <returns>The translation.</returns>
-        public async Task<Translation> TranslateAsync(string textToTranslate, Language sourceLanguage, Language targetLanguage)
+        public async Task<Translation> TranslateAsync(string textToTranslate)
         {
             ResetState();
             var tmStart = DateTime.Now;
@@ -63,15 +77,14 @@ namespace PopupTranslator
 
             try
             {
-                var outputFile = await SendTranslationRequestAsync(textToTranslate, sourceLanguage, targetLanguage);
-                translation = ParseTranslationHtml(textToTranslate.Trim(), sourceLanguage, targetLanguage, outputFile);
+                var outputFile = await SendTranslationRequestAsync(textToTranslate, SourceLanguage, TargetLanguage);
+                translation = ParseTranslationHtml(textToTranslate.Trim(), SourceLanguage, TargetLanguage, outputFile);
             }
             catch (Exception exception)
             {
                 Error = exception;
             }
 
-            // Return result
             TranslationTime = DateTime.Now - tmStart;
             return translation;
         }
@@ -170,8 +183,8 @@ namespace PopupTranslator
             var translatedTextOptions = filteredPhrases.Where(x => !x.Equals(originalText)).ToList();
 
             return translatedTextOptions.Count == 1
-                ? new Translation(CleanTranslationText(translatedTextOptions.First()))
-                : new Translation(CleanTranslationText(translatedTextOptions.First()), CleanTranslationText(translatedTextOptions.LastOrDefault()));
+                ? new Translation(CleanTranslationText(translatedTextOptions.First())) :
+                new Translation(CleanTranslationText(translatedTextOptions.First()), CleanTranslationText(translatedTextOptions.LastOrDefault()));
         }
 
         /// <summary>
@@ -183,6 +196,11 @@ namespace PopupTranslator
             {
                 SupportedLanguages();
             }
+        }
+
+        public Language LanguageNameToSupportedLanguage(string languageName)
+        {
+            return Languages.FirstOrDefault(supportedLanguage => supportedLanguage.Name.Equals(languageName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private static void SupportedLanguages()

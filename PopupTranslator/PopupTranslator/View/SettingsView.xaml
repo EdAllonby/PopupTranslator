@@ -7,17 +7,44 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Orientation="Vertical" Margin="5">
+                <Label Content="Source Language:" FontSize="10" />
+                <ComboBox Width="120" Height="20" ItemsSource="{Binding SupportedLanguages}"
+                          SelectedItem="{Binding SelectedSourceLanguage}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
+            <StackPanel Orientation="Vertical" Margin="5">
+                <Label Content="Source Language:" FontSize="10" />
+                <ComboBox Width="120" Height="20" ItemsSource="{Binding SupportedLanguages}"
+                          SelectedItem="{Binding SelectedTargetLanguage}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
             <Label Content="Current Key Combination:" />
             <Label Content="{Binding CurrentSetHotkeys}" />
         </StackPanel>
 
 
-        <Grid Row="1">
+        <Grid Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -36,20 +63,20 @@
 
         </Grid>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
 
-            <Button Height="24" Width="70" Content="OK"  Margin="5"
-                Command="{Binding ApplySettingsAndCloseCommand}" />
+            <Button Height="24" Width="70" Content="OK" Margin="5"
+                    Command="{Binding ApplySettingsAndCloseCommand}" />
 
-            <Button Height="24" Width="70" Content="Apply"  Margin="5"
-                Command="{Binding ApplySettingsCommand}" />
+            <Button Height="24" Width="70" Content="Apply" Margin="5"
+                    Command="{Binding ApplySettingsCommand}" />
 
 
-            <Button Height="24" Width="70" Content="Close"  Margin="5"
-                Command="{Binding CloseCommand}" />
+            <Button Height="24" Width="70" Content="Close" Margin="5"
+                    Command="{Binding CloseCommand}" />
 
         </StackPanel>
-       
+
 
     </Grid>
 </Window>
