@@ -75,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utility\EventUtility.cs" />
     <Compile Include="ViewModel\ContextItemViewModel.cs" />
     <Compile Include="HotkeyService.cs" />
     <Compile Include="IHotkeyService.cs" />

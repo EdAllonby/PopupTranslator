@@ -24,12 +24,12 @@
             </Grid.ColumnDefinitions>
 
 
-            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
+            <StackPanel Grid.Column="0" Orientation="Vertical">
                 <Label Content="Modifier Keys:" />
                 <Label Content="{Binding ModifierKeysPressed}" />
             </StackPanel>
 
-            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+            <StackPanel Grid.Column="1" Orientation="Vertical">
                 <Label Content="Action Key:" />
                 <Label Content="{Binding ActionKeyPressed}" />
             </StackPanel>

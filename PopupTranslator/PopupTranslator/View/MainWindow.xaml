@@ -16,8 +16,9 @@
             </TextBox.InputBindings>
         </TextBox>
 
-        <Label Grid.Row="1" Content="{Binding TranslatedText}" Width="300" FontSize="20" VerticalContentAlignment="Top"
-               HorizontalContentAlignment="Center" />
+        <Viewbox Grid.Row="1" Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10">
+            <TextBlock TextWrapping="Wrap" Text="{Binding TranslatedText}" />
+        </Viewbox>
 
     </Grid>
 </Window>
