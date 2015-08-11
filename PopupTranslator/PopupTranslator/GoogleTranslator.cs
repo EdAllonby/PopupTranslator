@@ -11,7 +11,7 @@ namespace PopupTranslator
     /// <summary>
     /// Translates text using Google's online language tools.
     /// </summary>
-    public class GoogleTranslator : ITranslator
+    public class GoogleTranslator : Translator
     {
         private const string UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
 
@@ -19,9 +19,6 @@ namespace PopupTranslator
         /// The language to translation mode map.
         /// </summary>
         private static List<Language> languages;
-
-        private Language sourceLanguage;
-        private Language targetLanguage;
 
         public GoogleTranslator()
         {
@@ -36,49 +33,9 @@ namespace PopupTranslator
         public string TranslationSpeechUrl { get; private set; }
 
         /// <summary>
-        /// Gets the error.
-        /// </summary>
-        public Exception Error { get; private set; }
-
-        /// <summary>
-        /// Gets the time taken to perform the translation.
-        /// </summary>
-        public TimeSpan TranslationTime { get; private set; }
-
-        /// <summary>
-        /// The source language of the translation.
-        /// </summary>
-        public Language SourceLanguage
-        {
-            get { return sourceLanguage; }
-            set
-            {
-                if (DoesTranslatorContainLanguage(value))
-                {
-                    sourceLanguage = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The target language of the translation.
-        /// </summary>
-        public Language TargetLanguage
-        {
-            get { return targetLanguage; }
-            set
-            {
-                if (DoesTranslatorContainLanguage(value))
-                {
-                    targetLanguage = value;
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets the supported languages.
         /// </summary>
-        public IEnumerable<Language> Languages
+        public override IEnumerable<Language> Languages
         {
             get
             {
@@ -92,41 +49,10 @@ namespace PopupTranslator
         /// </summary>
         /// <param name="textToTranslate">The text to translate.</param>
         /// <returns>The translation.</returns>
-        public async Task<Translation> TranslateAsync(string textToTranslate)
+        protected override async Task<Translation> Translate(string textToTranslate)
         {
-            ResetState();
-            var tmStart = DateTime.Now;
-            var translation = Translation.EmptyTranslation();
-
-            try
-            {
-                var outputFile = await SendTranslationRequestAsync(textToTranslate, SourceLanguage, TargetLanguage);
-                translation = ParseTranslationHtml(textToTranslate.Trim(), SourceLanguage, TargetLanguage, outputFile);
-            }
-            catch (Exception exception)
-            {
-                Error = exception;
-            }
-
-            TranslationTime = DateTime.Now - tmStart;
-            return translation;
-        }
-
-        public Language LanguageNameToSupportedLanguage(string languageName)
-        {
-            return Languages.FirstOrDefault(supportedLanguage => supportedLanguage.Name.Equals(languageName, StringComparison.InvariantCultureIgnoreCase));
-        }
-
-        private bool DoesTranslatorContainLanguage(Language value)
-        {
-            return value != null && Languages.Contains(value);
-        }
-
-        private void ResetState()
-        {
-            Error = null;
-            TranslationSpeechUrl = null;
-            TranslationTime = TimeSpan.Zero;
+            string outputFile = await SendTranslationRequestAsync(textToTranslate, SourceLanguage, TargetLanguage);
+            return ParseTranslationHtml(textToTranslate.Trim(), SourceLanguage, TargetLanguage, outputFile);
         }
 
         private static async Task<string> SendTranslationRequestAsync(string sourceText, Language sourceLanguage, Language targetLanguage)

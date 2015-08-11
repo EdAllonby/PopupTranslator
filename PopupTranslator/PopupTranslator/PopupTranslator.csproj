@@ -76,6 +76,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Translation.cs" />
+    <Compile Include="Translator.cs" />
     <Compile Include="Utility\EventUtility.cs" />
     <Compile Include="ViewModel\ContextItemViewModel.cs" />
     <Compile Include="HotkeyService.cs" />

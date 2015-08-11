@@ -16,8 +16,14 @@ namespace PopupTranslator
         /// </summary>
         TimeSpan TranslationTime { get; }
 
+        /// <summary>
+        /// The text to translate's original language.
+        /// </summary>
         Language SourceLanguage { get; set; }
 
+        /// <summary>
+        /// The language to translate the text to.
+        /// </summary>
         Language TargetLanguage { get; set; }
 
         /// <summary>
@@ -27,6 +33,11 @@ namespace PopupTranslator
         /// <returns></returns>
         Task<Translation> TranslateAsync(string textToTranslate);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="languageName"></param>
+        /// <returns></returns>
         Language LanguageNameToSupportedLanguage(string languageName);
     }
 }
