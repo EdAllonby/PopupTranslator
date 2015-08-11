@@ -21,7 +21,7 @@ namespace PopupTranslator
 
         public void SetNewHotkeys(Key actionKey, ModifierKeys modifierKeys)
         {
-            if (!actionKey.Equals(Key.None) && modifierKeys.Equals(ModifierKeys.None))
+            if (!actionKey.Equals(Key.None) && !modifierKeys.Equals(ModifierKeys.None))
             {
                 ActionKey = actionKey;
                 ModifierKeys = modifierKeys;

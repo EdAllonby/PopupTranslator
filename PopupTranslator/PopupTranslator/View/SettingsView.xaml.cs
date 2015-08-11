@@ -23,9 +23,9 @@ namespace PopupTranslator.View
             Close();
         }
 
-        private void SettingsView_OnKeyDown(object sender, KeyEventArgs e)
+        private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            var modifiersPressed = Keyboard.Modifiers;
+            ModifierKeys modifiersPressed = Keyboard.Modifiers;
             viewModel.ActionKeyPressed = e.Key;
             viewModel.ModifierKeysPressed = modifiersPressed;
         }
