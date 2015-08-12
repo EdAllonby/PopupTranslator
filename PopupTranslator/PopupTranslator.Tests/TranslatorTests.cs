@@ -8,26 +8,19 @@ namespace PopupTranslator.Tests
     [TestFixture]
     public class TranslatorTests
     {
-        private Mock<Translator> mockTranslator;
-        private Language supportedLanguage;
-        private Language unsupportedLanguage;
-        private Translator Translator => mockTranslator.Object;
-
         [SetUp]
         public void BeforeEachTest()
         {
             supportedLanguage = new Language("SupportedLanguage", "SL");
             unsupportedLanguage = new Language("UnsupportedLanguage", "UL");
             mockTranslator = new Mock<Translator>();
-            mockTranslator.Setup(x => x.Languages).Returns(new List<Language> { supportedLanguage });
+            mockTranslator.Setup(x => x.Languages).Returns(new List<Language> {supportedLanguage});
         }
 
-        [Test]
-        public void Setting_SourceLanguage_SetsNull_IfNotIncluded()
-        {
-            Translator.SourceLanguage = unsupportedLanguage;
-            Assert.IsNull(Translator.SourceLanguage);
-        }
+        private Mock<Translator> mockTranslator;
+        private Language supportedLanguage;
+        private Language unsupportedLanguage;
+        private Translator Translator => mockTranslator.Object;
 
         [Test]
         public void Setting_SourceLanguage_SetsLanguage_IfLanguageIsIncluded()
@@ -38,10 +31,10 @@ namespace PopupTranslator.Tests
         }
 
         [Test]
-        public void Setting_TargetLanguage_SetsNull_IfNotIncluded()
+        public void Setting_SourceLanguage_SetsNull_IfNotIncluded()
         {
-            Translator.TargetLanguage = unsupportedLanguage;
-            Assert.IsNull(Translator.TargetLanguage);
+            Translator.SourceLanguage = unsupportedLanguage;
+            Assert.IsNull(Translator.SourceLanguage);
         }
 
         [Test]
@@ -50,6 +43,13 @@ namespace PopupTranslator.Tests
             Translator.TargetLanguage = supportedLanguage;
 
             Assert.AreEqual(Translator.TargetLanguage, supportedLanguage);
+        }
+
+        [Test]
+        public void Setting_TargetLanguage_SetsNull_IfNotIncluded()
+        {
+            Translator.TargetLanguage = unsupportedLanguage;
+            Assert.IsNull(Translator.TargetLanguage);
         }
 
         [Test]

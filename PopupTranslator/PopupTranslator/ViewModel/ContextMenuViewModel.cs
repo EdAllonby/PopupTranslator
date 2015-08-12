@@ -6,9 +6,6 @@ namespace PopupTranslator.ViewModel
 {
     internal class ContextMenuViewModel
     {
-        public event EventHandler ExitApplicationRequested;
-        public event EventHandler OpenSettingsViewRequested;
-
         public ContextMenuViewModel()
         {
             Actions = new ObservableCollection<ContextItemViewModel>
@@ -19,6 +16,8 @@ namespace PopupTranslator.ViewModel
         }
 
         public ObservableCollection<ContextItemViewModel> Actions { get; set; }
+        public event EventHandler ExitApplicationRequested;
+        public event EventHandler OpenSettingsViewRequested;
 
         private void OpenSettings(object obj)
         {

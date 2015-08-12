@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using PopupTranslator.ViewModel;
 
 namespace PopupTranslator.View
@@ -17,12 +18,12 @@ namespace PopupTranslator.View
             viewModel.ExitApplicationRequested += OnExitApplicationRequested;
         }
 
-        private static void OnExitApplicationRequested(object sender, System.EventArgs e)
+        private static void OnExitApplicationRequested(object sender, EventArgs e)
         {
             Application.Current.Shutdown();
         }
 
-        private static void OnOpenSettingsViewRequested(object sender, System.EventArgs e)
+        private static void OnOpenSettingsViewRequested(object sender, EventArgs e)
         {
             var settingsView = new SettingsView();
             settingsView.Show();
