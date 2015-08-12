@@ -32,12 +32,5 @@ namespace PopupTranslator
         /// <param name="textToTranslate">The text to translate.</param>
         /// <returns></returns>
         Task<Translation> TranslateAsync(string textToTranslate);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="languageName"></param>
-        /// <returns></returns>
-        Language LanguageNameToSupportedLanguage(string languageName);
     }
 }

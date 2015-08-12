@@ -18,7 +18,7 @@ namespace PopupTranslator
         /// <summary>
         /// The language to translation mode map.
         /// </summary>
-        private static List<Language> languages;
+        private static IList<Language> supportedLanguages;
 
         public GoogleTranslator()
         {
@@ -40,7 +40,7 @@ namespace PopupTranslator
             get
             {
                 EnsureInitialized();
-                return languages;
+                return supportedLanguages;
             }
         }
 
@@ -49,7 +49,7 @@ namespace PopupTranslator
         /// </summary>
         /// <param name="textToTranslate">The text to translate.</param>
         /// <returns>The translation.</returns>
-        protected override async Task<Translation> Translate(string textToTranslate)
+        protected override async Task<Translation> TranslateTextAsync(string textToTranslate)
         {
             string outputFile = await SendTranslationRequestAsync(textToTranslate, SourceLanguage, TargetLanguage);
             return ParseTranslationHtml(textToTranslate.Trim(), SourceLanguage, TargetLanguage, outputFile);
@@ -156,7 +156,7 @@ namespace PopupTranslator
         /// </summary>
         private static void EnsureInitialized()
         {
-            if (languages == null)
+            if (supportedLanguages == null)
             {
                 SupportedLanguages();
             }
@@ -164,70 +164,70 @@ namespace PopupTranslator
 
         private static void SupportedLanguages()
         {
-            languages = new List<Language>();
-            languages.Add(new Language("Afrikaans", "af"));
-            languages.Add(new Language("Albanian", "sq"));
-            languages.Add(new Language("Arabic", "ar"));
-            languages.Add(new Language("Armenian", "hy"));
-            languages.Add(new Language("Azerbaijani", "az"));
-            languages.Add(new Language("Basque", "eu"));
-            languages.Add(new Language("Belarusian", "be"));
-            languages.Add(new Language("Bengali", "bn"));
-            languages.Add(new Language("Bulgarian", "bg"));
-            languages.Add(new Language("Catalan", "ca"));
-            languages.Add(new Language("Chinese", "zh-CN"));
-            languages.Add(new Language("Croatian", "hr"));
-            languages.Add(new Language("Czech", "cs"));
-            languages.Add(new Language("Danish", "da"));
-            languages.Add(new Language("Dutch", "nl"));
-            languages.Add(new Language("English", "en"));
-            languages.Add(new Language("Esperanto", "eo"));
-            languages.Add(new Language("Estonian", "et"));
-            languages.Add(new Language("Filipino", "tl"));
-            languages.Add(new Language("Finnish", "fi"));
-            languages.Add(new Language("French", "fr"));
-            languages.Add(new Language("Galician", "gl"));
-            languages.Add(new Language("German", "de"));
-            languages.Add(new Language("Georgian", "ka"));
-            languages.Add(new Language("Greek", "el"));
-            languages.Add(new Language("Haitian Creole", "ht"));
-            languages.Add(new Language("Hebrew", "iw"));
-            languages.Add(new Language("Hindi", "hi"));
-            languages.Add(new Language("Hungarian", "hu"));
-            languages.Add(new Language("Icelandic", "is"));
-            languages.Add(new Language("Indonesian", "id"));
-            languages.Add(new Language("Irish", "ga"));
-            languages.Add(new Language("Italian", "it"));
-            languages.Add(new Language("Japanese", "ja"));
-            languages.Add(new Language("Korean", "ko"));
-            languages.Add(new Language("Lao", "lo"));
-            languages.Add(new Language("Latin", "la"));
-            languages.Add(new Language("Latvian", "lv"));
-            languages.Add(new Language("Lithuanian", "lt"));
-            languages.Add(new Language("Macedonian", "mk"));
-            languages.Add(new Language("Malay", "ms"));
-            languages.Add(new Language("Maltese", "mt"));
-            languages.Add(new Language("Norwegian", "no"));
-            languages.Add(new Language("Persian", "fa"));
-            languages.Add(new Language("Polish", "pl"));
-            languages.Add(new Language("Portuguese", "pt"));
-            languages.Add(new Language("Romanian", "ro"));
-            languages.Add(new Language("Russian", "ru"));
-            languages.Add(new Language("Serbian", "sr"));
-            languages.Add(new Language("Slovak", "sk"));
-            languages.Add(new Language("Slovenian", "sl"));
-            languages.Add(new Language("Spanish", "es"));
-            languages.Add(new Language("Swahili", "sw"));
-            languages.Add(new Language("Swedish", "sv"));
-            languages.Add(new Language("Tamil", "ta"));
-            languages.Add(new Language("Telugu", "te"));
-            languages.Add(new Language("Thai", "th"));
-            languages.Add(new Language("Turkish", "tr"));
-            languages.Add(new Language("Ukrainian", "uk"));
-            languages.Add(new Language("Urdu", "ur"));
-            languages.Add(new Language("Vietnamese", "vi"));
-            languages.Add(new Language("Welsh", "cy"));
-            languages.Add(new Language("Yiddish", "yi"));
+            supportedLanguages = new List<Language>();
+            supportedLanguages.Add(new Language("Afrikaans", "af"));
+            supportedLanguages.Add(new Language("Albanian", "sq"));
+            supportedLanguages.Add(new Language("Arabic", "ar"));
+            supportedLanguages.Add(new Language("Armenian", "hy"));
+            supportedLanguages.Add(new Language("Azerbaijani", "az"));
+            supportedLanguages.Add(new Language("Basque", "eu"));
+            supportedLanguages.Add(new Language("Belarusian", "be"));
+            supportedLanguages.Add(new Language("Bengali", "bn"));
+            supportedLanguages.Add(new Language("Bulgarian", "bg"));
+            supportedLanguages.Add(new Language("Catalan", "ca"));
+            supportedLanguages.Add(new Language("Chinese", "zh-CN"));
+            supportedLanguages.Add(new Language("Croatian", "hr"));
+            supportedLanguages.Add(new Language("Czech", "cs"));
+            supportedLanguages.Add(new Language("Danish", "da"));
+            supportedLanguages.Add(new Language("Dutch", "nl"));
+            supportedLanguages.Add(new Language("English", "en"));
+            supportedLanguages.Add(new Language("Esperanto", "eo"));
+            supportedLanguages.Add(new Language("Estonian", "et"));
+            supportedLanguages.Add(new Language("Filipino", "tl"));
+            supportedLanguages.Add(new Language("Finnish", "fi"));
+            supportedLanguages.Add(new Language("French", "fr"));
+            supportedLanguages.Add(new Language("Galician", "gl"));
+            supportedLanguages.Add(new Language("German", "de"));
+            supportedLanguages.Add(new Language("Georgian", "ka"));
+            supportedLanguages.Add(new Language("Greek", "el"));
+            supportedLanguages.Add(new Language("Haitian Creole", "ht"));
+            supportedLanguages.Add(new Language("Hebrew", "iw"));
+            supportedLanguages.Add(new Language("Hindi", "hi"));
+            supportedLanguages.Add(new Language("Hungarian", "hu"));
+            supportedLanguages.Add(new Language("Icelandic", "is"));
+            supportedLanguages.Add(new Language("Indonesian", "id"));
+            supportedLanguages.Add(new Language("Irish", "ga"));
+            supportedLanguages.Add(new Language("Italian", "it"));
+            supportedLanguages.Add(new Language("Japanese", "ja"));
+            supportedLanguages.Add(new Language("Korean", "ko"));
+            supportedLanguages.Add(new Language("Lao", "lo"));
+            supportedLanguages.Add(new Language("Latin", "la"));
+            supportedLanguages.Add(new Language("Latvian", "lv"));
+            supportedLanguages.Add(new Language("Lithuanian", "lt"));
+            supportedLanguages.Add(new Language("Macedonian", "mk"));
+            supportedLanguages.Add(new Language("Malay", "ms"));
+            supportedLanguages.Add(new Language("Maltese", "mt"));
+            supportedLanguages.Add(new Language("Norwegian", "no"));
+            supportedLanguages.Add(new Language("Persian", "fa"));
+            supportedLanguages.Add(new Language("Polish", "pl"));
+            supportedLanguages.Add(new Language("Portuguese", "pt"));
+            supportedLanguages.Add(new Language("Romanian", "ro"));
+            supportedLanguages.Add(new Language("Russian", "ru"));
+            supportedLanguages.Add(new Language("Serbian", "sr"));
+            supportedLanguages.Add(new Language("Slovak", "sk"));
+            supportedLanguages.Add(new Language("Slovenian", "sl"));
+            supportedLanguages.Add(new Language("Spanish", "es"));
+            supportedLanguages.Add(new Language("Swahili", "sw"));
+            supportedLanguages.Add(new Language("Swedish", "sv"));
+            supportedLanguages.Add(new Language("Tamil", "ta"));
+            supportedLanguages.Add(new Language("Telugu", "te"));
+            supportedLanguages.Add(new Language("Thai", "th"));
+            supportedLanguages.Add(new Language("Turkish", "tr"));
+            supportedLanguages.Add(new Language("Ukrainian", "uk"));
+            supportedLanguages.Add(new Language("Urdu", "ur"));
+            supportedLanguages.Add(new Language("Vietnamese", "vi"));
+            supportedLanguages.Add(new Language("Welsh", "cy"));
+            supportedLanguages.Add(new Language("Yiddish", "yi"));
         }
     }
 }

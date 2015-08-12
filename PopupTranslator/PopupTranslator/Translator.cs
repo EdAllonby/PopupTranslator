@@ -41,21 +41,26 @@ namespace PopupTranslator
         public async Task<Translation> TranslateAsync(string textToTranslate)
         {
             TranslationTime = TimeSpan.Zero;
-            var tmStart = DateTime.Now;
+            var translationStartTime = DateTime.Now;
 
-            Translation translation = await Translate(textToTranslate);
+            Translation translation = await TranslateTextAsync(textToTranslate);
 
-            TranslationTime = DateTime.Now - tmStart;
+            TranslationTime = DateTime.Now - translationStartTime;
 
             return translation;
         }
 
-        public Language LanguageNameToSupportedLanguage(string languageName)
+        protected Language LanguageNameToSupportedLanguage(string languageName)
         {
             return Languages.FirstOrDefault(supportedLanguage => supportedLanguage.Name.Equals(languageName, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        protected abstract Task<Translation> Translate(string textToTranslate);
+        /// <summary>
+        /// The core implementation of the translator.
+        /// </summary>
+        /// <param name="textToTranslate">The text to translate.</param>
+        /// <returns></returns>
+        protected abstract Task<Translation> TranslateTextAsync(string textToTranslate);
 
         private bool DoesTranslatorContainLanguage(Language value)
         {
